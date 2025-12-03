@@ -3,114 +3,230 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>اولین آهنگ</title>
+  <title>چون اولین آهنگتون بود</title>
+  <meta name="color-scheme" content="dark light" />
   <style>
-    body {
-      margin: 0;
-      font-family: "Tahoma", sans-serif;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: #fff;
-      text-align: center;
+    :root{
+      --bg1:#0b1022; --bg2:#1a2a6c; --bg3:#b21f1f; --bg4:#fdbb2d;
+      --text:#eaf0ff; --muted:#a9b3c7; --accent:#ff7b7b; --accent2:#ff4b4b;
+      --glass: rgba(255,255,255,0.06);
     }
-    @keyframes gradientBG {
-      0% {background-position:0% 50%;}
-      50% {background-position:100% 50%;}
-      100% {background-position:0% 50%;}
+    html,body{ height:100%; margin:0; direction:rtl; }
+    body{
+      font-family:"Vazirmatn","Tahoma",sans-serif;
+      color:var(--text);
+      background: linear-gradient(135deg,var(--bg2),var(--bg3),var(--bg4));
+      background-size: 300% 300%;
+      animation: bgShift 18s ease infinite;
     }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 40px 20px;
+    @keyframes bgShift{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
     }
-    img {
-      max-width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-      animation: fadeIn 2s ease forwards;
-      opacity: 0;
+    .wrap{
+      min-height:100%;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
     }
-    h1 {
-      margin-top: 25px;
-      font-size: 32px;
-      color: #ffe082;
-      animation: slideUp 2s ease forwards;
-      opacity: 0;
+    .card{
+      width:100%; max-width:980px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border-radius:18px; overflow:hidden;
+      box-shadow: 0 18px 50px rgba(3,7,18,0.55);
+      display:grid; grid-template-columns: 1fr 460px;
     }
-    @keyframes fadeIn {
-      to {opacity:1;}
+    @media (max-width:900px){ .card{ grid-template-columns:1fr; } }
+
+    .left{
+      padding:34px;
+      display:flex; flex-direction:column; justify-content:center; gap:16px;
+      backdrop-filter: blur(4px);
     }
-    @keyframes slideUp {
-      to {opacity:1; transform:translateY(0);}
-      from {transform:translateY(40px);}
+    .title{ font-size:30px; font-weight:800; margin:0; letter-spacing:.4px; }
+    .subtitle{ margin:0; color:var(--muted); font-size:15px; }
+    .message{
+      margin-top:6px; background:var(--glass); border-radius:12px; padding:14px;
+      line-height:1.6; color:#eef4ff;
     }
-    .play-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
+    .controls{ display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+    .btn{
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      color:#071021; border:none; padding:10px 16px; border-radius:12px;
+      font-weight:800; cursor:pointer; box-shadow:0 10px 24px rgba(255,75,75,.25);
     }
-    .big-play {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: linear-gradient(180deg,#ff7b7b,#ff4b4b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 12px 40px rgba(255,75,75,0.4);
+    .btn.secondary{
+      background:transparent; color:var(--muted);
+      border:1px solid rgba(255,255,255,0.18); box-shadow:none; font-weight:700;
     }
-    .big-play svg {
-      width: 60px;
-      height: 60px;
-      fill: #fff;
-      transform: translateX(5px);
+    .status{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+    .right{
+      position:relative; min-height:340px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
     }
+    .cover{
+      width:100%; height:100%; max-height:560px; object-fit:cover; display:block;
+      opacity:0; transform:scale(1.02);
+      animation: imgReveal 1.6s ease forwards .25s;
+      border-radius:0;
+    }
+    @keyframes imgReveal{
+      to{ opacity:1; transform:scale(1); }
+    }
+    .overlay{
+      position:absolute; left:16px; bottom:16px;
+      background:linear-gradient(90deg,rgba(0,0,0,.52),rgba(0,0,0,.28));
+      color:#fff; padding:10px 14px; border-radius:12px;
+      font-weight:700; box-shadow:0 10px 26px rgba(2,6,23,.6);
+      backdrop-filter: blur(6px);
+    }
+
+    .play-overlay{
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, rgba(2,6,23,0.38), rgba(2,6,23,0.62));
+      transition:opacity .25s ease, visibility .25s ease;
+    }
+    .play-overlay.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+    .big-play{
+      width:120px; height:120px; border-radius:999px;
+      background:linear-gradient(180deg,var(--accent),var(--accent2));
+      display:flex; align-items:center; justify-content:center; cursor:pointer;
+      box-shadow:0 16px 46px rgba(255,75,75,.32);
+      border:6px solid rgba(255,255,255,0.1);
+    }
+    .big-play svg{ width:54px; height:54px; fill:#071021; transform:translateX(4px); }
+
+    footer.note{ margin-top:10px; color:var(--muted); font-size:13px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="assets/IMG_۲۰۲۱۰۹۲۷_۱۲۵۳۳۲.jpg" alt="عکس ویژه" />
-    <h1>چون اولین آهنگتون بود</h1>
-  </div>
+  <div class="wrap">
+    <div class="card" role="main" aria-label="صفحه آهنگ و عکس">
+      <div class="left">
+        <h1 class="title">چون اولین آهنگتون بود</h1>
+        <p class="subtitle">فضایی گرم و زنده با موسیقی و تصویر</p>
 
-  <!-- پخش آهنگ -->
-  <audio id="bgAudio" preload="auto" loop>
-    <source src="assets/03. Arta, Hoomaan, Arman Miladi - Andaze Man.mp3" type="audio/mpeg">
-    مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
-  </audio>
+        <div class="message">
+          <strong>توضیح کوتاه</strong>
+          <div style="margin-top:6px;">
+            پخش خودکار آهنگ امتحان می‌شود؛ اگر مرورگر اجازه ندهد، با لمس دکمه پخش، موسیقی فعال می‌شود. تصویر با افکت نرم ظاهر می‌گردد.
+          </div>
+        </div>
 
-  <!-- دکمه بزرگ پخش در صورت بلاک شدن autoplay -->
-  <div id="playOverlay" class="play-overlay">
-    <div class="big-play" id="bigPlayBtn">
-      <svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg>
+        <div class="controls">
+          <button id="toggleMute" class="btn secondary" title="قطع یا وصل صدا">قطع صدا</button>
+          <button id="restartBtn" class="btn secondary" title="شروع از ابتدا">شروع از ابتدا</button>
+          <button id="downloadBtn" class="btn" title="دانلود آهنگ">دانلود آهنگ</button>
+        </div>
+        <div id="status" class="status">در حال تلاش برای پخش خودکار…</div>
+
+        <footer class="note">طراحی شده برای نمایش بی‌نقص روی موبایل و دسکتاپ</footer>
+      </div>
+
+      <div class="right">
+        <img id="coverImage" class="cover" alt="عکس ویژه" />
+        <div class="overlay">چون اولین آهنگتون بود</div>
+
+        <div id="playOverlay" class="play-overlay">
+          <div id="bigPlayBtn" class="big-play" role="button" aria-label="پخش آهنگ">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2v20l18-10L4 2z"/></svg>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- عنصر صوتی پنهان اما قابل کنترل -->
+  <audio id="bgAudio" preload="auto" loop></audio>
+
   <script>
-    const audio = document.getElementById('bgAudio');
-    const playOverlay = document.getElementById('playOverlay');
-    const bigPlayBtn = document.getElementById('bigPlayBtn');
+    (function(){
+      // نام‌های دقیق فایل‌ها (طبق گفتۀ شما)
+      const musicFile = "assets/03. Arta, Hoomaan, Arman Miladi - Andaze Man.mp3";
+      const imageFile = "assets/IMG_۲۰۲۱۰۹۲۷_۱۲۵۳۳۲.jpg";
 
-    // تلاش برای پخش خودکار
-    window.addEventListener('load', () => {
-      audio.play().then(() => {
-        playOverlay.style.display = 'none';
-      }).catch(() => {
-        playOverlay.style.display = 'flex';
+      const audio = document.getElementById('bgAudio');
+      const statusEl = document.getElementById('status');
+      const playOverlay = document.getElementById('playOverlay');
+      const bigPlayBtn = document.getElementById('bigPlayBtn');
+      const toggleMute = document.getElementById('toggleMute');
+      const restartBtn = document.getElementById('restartBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const coverImage = document.getElementById('coverImage');
+
+      // تنظیم منابع با encodeURI برای اطمینان از کاراکترهای خاص و فاصله‌ها
+      audio.src = encodeURI(musicFile);
+      coverImage.src = encodeURI(imageFile);
+
+      // تلاش برای پخش خودکار
+      function tryAutoplay(){
+        audio.play().then(() => {
+          playOverlay.classList.add('hidden');
+          statusEl.textContent = "در حال پخش";
+        }).catch(() => {
+          playOverlay.classList.remove('hidden');
+          statusEl.textContent = "برای پخش، روی دکمه ضربه بزنید";
+        });
+      }
+
+      // شروع تلاش بعد از بارگذاری
+      window.addEventListener('load', () => {
+        // برای برخی مرورگرها کمی تأخیر مفید است
+        setTimeout(tryAutoplay, 280);
       });
-    });
 
-    // اگر autoplay بلاک شد، با کلیک کاربر پخش کن
-    bigPlayBtn.addEventListener('click', () => {
-      audio.play();
-      playOverlay.style.display = 'none';
-    });
+      // دکمه بزرگ پخش
+      bigPlayBtn.addEventListener('click', () => {
+        audio.play().then(()=>{
+          playOverlay.classList.add('hidden');
+          statusEl.textContent = "در حال پخش";
+        }).catch(()=>{ /* در صورت خطا، پیام را تغییر نده */ });
+      });
+
+      // قطع/وصل صدا
+      toggleMute.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+        toggleMute.textContent = audio.muted ? "وصل صدا" : "قطع صدا";
+        statusEl.textContent = audio.muted ? "صدا قطع است" : "در حال پخش";
+      });
+
+      // شروع از ابتدا
+      restartBtn.addEventListener('click', () => {
+        audio.currentTime = 0;
+        audio.play().catch(()=>{});
+        statusEl.textContent = "شروع از ابتدا";
+      });
+
+      // دانلود آهنگ
+      downloadBtn.addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.href = encodeURI(musicFile);
+        a.download = "Andaze-Man.mp3"; // نام دانلودی ساده‌تر
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      // نمایش وضعیت خطا برای تصویر
+      coverImage.addEventListener('error', () => {
+        statusEl.textContent = "نمایش تصویر ممکن نشد. مسیر یا نام فایل را بررسی کنید.";
+      });
+
+      // اگر کاربر تعامل کرد، دوباره تلاش کن (برای موبایل)
+      ['touchstart','click','keydown'].forEach(ev => {
+        window.addEventListener(ev, function once(){
+          if (audio.paused){
+            audio.play().then(()=>{
+              playOverlay.classList.add('hidden');
+              statusEl.textContent = "در حال پخش";
+            }).catch(()=>{});
+          }
+          window.removeEventListener(ev, once);
+        }, {once:true});
+      });
+    })();
   </script>
 </body>
 </html>
